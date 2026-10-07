@@ -1,0 +1,40 @@
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  WORKER
+  COMMAND_ADMIN
+}
+
+enum Status {
+  ACTIVE
+  SUSPENDED
+  PENDING
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  passwordHash String
+  role Role @default(WORKER)
+  status Status @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  workSessions WorkSession[]
+}
+
+model WorkSession {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clockIn DateTime @default(now())
+  clockOut DateTime?
+  ipAddress String?
+  deviceInfo String?
+}
