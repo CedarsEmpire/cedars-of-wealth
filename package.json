@@ -1,31 +1,6 @@
 {
   "name": "cedars-of-wealth",
-  "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "server": "node server.js",
-    "dev:all": "concurrently \"npm run server\" \"npm run dev\""
-  },
-  "dependencies": {
-    "next": "14.2.5",
-    "react": "^18",
-    "react-dom": "^18",
-    "express": "^4.19.2",
-    "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5",
-    "cors": "^2.8.5",
-    "@prisma/client": "^5.14.0",
-    "concurrently": "^8.2.2"
-  },
-  "devDependencies": {
-    "prisma": "^5.14.0",
-    "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.5"
-  }
+  "scripts": { "dev": "next dev", "build": "next build", "start": "next start" },
+  "dependencies": { "next": "14.2.5", "react": "18.3.1", "react-dom": "18.3.1" }
 }
