@@ -1,59 +1,55 @@
+\"use client";
+import { useState } from "react";
+
 export default function Page() {
+  const [loading, setLoading] = useState(false);
+
+  const downloadPDF = async () => {
+    setLoading(true);
+    // load CDN if not loaded
+    if (!window.html2pdf) {
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+      document.head.appendChild(s);
+      await new Promise(r => s.onload = r);
+    }
+    const element = document.getElementById("receipt");
+    const opt = {
+      margin: 0.5,
+      filename: 'Cedars_Wealth_Statement.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    window.html2pdf().set(opt).from(element).save().then(()=>setLoading(false));
+  };
+
   return (
-    <main style={{background:"#020a06",color:"#e8ffe8",minHeight:"100vh",fontFamily:"system-ui, monospace",padding:"0"}}>
-      <header style={{borderBottom:"1px solid #0a2a15",padding:"16px 24px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <div style={{display:"flex",gap:"10px",alignItems:"center"}}>
-          <span style={{fontSize:"22px"}}>🌲</span>
-          <strong style={{color:"#f5c542",letterSpacing:"1px"}}>CEDARS OF WEALTH</strong>
-        </div>
-        <span style={{fontSize:"11px",border:"1px solid #00ff88",color:"#00ff88",padding:"4px 8px"}}>AUDITED ESCROW • KYC REQUIRED</span>
+    <main style={{background:"#020a06",color:"#e8ffe8",minHeight:"100vh",fontFamily:"system-ui, monospace"}}>
+      <header style={{borderBottom:"1px solid #0a2a15",padding:"16px 24px",display:"flex",justifyContent:"space-between"}}>
+        <strong style={{color:"#f5c542"}}>🌲 CEDARS OF WEALTH</strong>
+        <button onClick={downloadPDF} style={{background:"#00ff88",color:"#000",border:"none",padding:"6px 12px",borderRadius:"4px",cursor:"pointer",fontWeight:"bold"}}>
+          {loading ? "Generating..." : "Download PDF Statement"}
+        </button>
       </header>
 
-      <section style={{padding:"60px 24px",textAlign:"center",maxWidth:"900px",margin:"0 auto"}}>
-        <h1 style={{fontSize:"32px",color:"#f5c542",lineHeight:"1.2"}}>Humanitarian Capital Engine</h1>
-        <p style={{color:"#a0c0a0",marginTop:"12px",fontSize:"15px"}}>
-          Corporate humanitarian platform. We route worker capital into verified aid projects via transparent escrow, staking, and FX services. No guaranteed returns. All yields variable and audited.
-        </p>
-        <div style={{marginTop:"24px",display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
-          <div style={{background:"#0a1f12",border:"1px solid #123a22",padding:"12px 16px",borderRadius:"6px"}}>
-            <div style={{fontSize:"11px",color:"#8ab48a"}}>24H TREASURY REPORT</div>
-            <div style={{fontWeight:"bold"}}>Published Daily</div>
-          </div>
-          <div style={{background:"#0a1f12",border:"1px solid #123a22",padding:"12px 16px",borderRadius:"6px"}}>
-            <div style={{fontSize:"11px",color:"#8ab48a"}}>ESCROW FEE</div>
-            <div style={{fontWeight:"bold"}}>Disclosed at Checkout</div>
-          </div>
+      <div id="receipt" style={{padding:"40px 24px",maxWidth:"800px",margin:"0 auto"}}>
+        <h1 style={{color:"#f5c542",textAlign:"center"}}>Humanitarian Capital Engine</h1>
+        <p style={{textAlign:"center",color:"#a0c0a0",fontSize:"12px"}}>Compliant Escrow Report • No Guaranteed Yield • Variable APY Only</p>
+        
+        <div style={{background:"#0a1f12",border:"1px solid #123a22",padding:"16px",marginTop:"24px",borderRadius:"6px"}}>
+          <p style={{fontSize:"11px",color:"#8ab48a"}}>DEPOSIT ADDRESS (TRC20)</p>
+          <p style={{wordBreak:"break-all",color:"#00ff88"}}>TE26B7zQjMbahYAWcxEsSPC6aZEr2Hcz1u</p>
+          <p style={{fontSize:"11px",color:"#6a8a6a",marginTop:"10px"}}>This statement was generated client-side using html2pdf.js. All fees are disclosed at checkout. No daily 1.5% guarantee. For audit purposes only.</p>
         </div>
-        <p style={{fontSize:"11px",color:"#6a8a6a",marginTop:"20px"}}>Deposits: TRC20 TE26B7zQjMbahYAWcxEsSPC6aZEr2Hcz1u • Risk Disclosure: Crypto assets are volatile. Past performance does not guarantee future results.</p>
-      </section>
 
-      <section style={{background:"#08140c",padding:"32px 24px"}}>
-        <h2 style={{textAlign:"center",color:"#f5c542",fontSize:"18px"}}>20 Transparent Services (Fees Disclosed, No Guaranteed Yield)</h2>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:"12px",maxWidth:"1000px",margin:"20px auto"}}>
-          {[
-            "P2P Escrow Settlement","60s Verification Tasks","Withdrawal Processing","Staking Pool Access (Variable APY)","Locked Treasury Reports (5% Target, Not Guaranteed)","30-Day Liquidity Pools","Referral Program","Aid Matching Escrow","FX & Stablecoin Services","Booster Deposit Packages",
-            "Validator Node Hosting","DEX Liquidity Services","Sponsorship Placement","Data API Access","KYC Processing","Micro-Advance Services","Badge Minting","Carbon Credit Facilitation","Auto-Compounding Tool","Dispute Mediation"
-          ].map((t,i)=>(
-            <div key={i} style={{background:"#0d2214",border:"1px solid #1a3a24",padding:"12px",borderRadius:"6px",fontSize:"12px"}}>
-              <span style={{color:"#00ff88"}}>{String(i+1).padStart(2,"0")}</span> {t}
-            </div>
-          ))}
+        <div style={{marginTop:"24px",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",fontSize:"12px"}}>
+          <div style={{background:"#08140c",padding:"12px",border:"1px solid #1a3a24"}}>Service: Escrow Settlement<br/>Fee: Disclosed</div>
+          <div style={{background:"#08140c",padding:"12px",border:"1px solid #1a3a24"}}>KYC: Required Before Withdrawal</div>
         </div>
-      </section>
 
-      <section style={{padding:"32px 24px",maxWidth:"800px",margin:"0 auto"}}>
-        <h3 style={{color:"#f5c542"}}>Calculator — Realistic Example</h3>
-        <div style={{background:"#0a1f12",border:"1px solid #1f3a25",padding:"16px",borderRadius:"6px",marginTop:"12px",fontSize:"13px"}}>
-          <p>Deposit: $300</p>
-          <p>Illustrative APY: 5% (variable, not guaranteed)</p>
-          <p>Estimated Yearly: $15.00 before fees</p>
-          <p style={{color:"#8ab48a",fontSize:"11px",marginTop:"8px"}}>This is an educational example only. Actual returns depend on market conditions, fees disclosed at checkout, and project performance. No daily 1.5% guarantee.</p>
-        </div>
-      </section>
-
-      <footer style={{borderTop:"1px solid #0a2a15",padding:"20px 24px",textAlign:"center",fontSize:"11px",color:"#6a8a6a"}}>
-        © 2026 Cedars of Wealth • Compliance: KYC required before withdrawal • All fees shown before confirmation • Privacy | Terms | Security
-      </footer>
+        <p style={{fontSize:"10px",color:"#5a7a5a",marginTop:"30px",textAlign:"center"}}>© 2026 Cedars of Wealth • Generated {new Date().toLocaleDateString()} • This PDF is not a securities offering.</p>
+      </div>
     </main>
   );
 }
